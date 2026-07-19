@@ -21,9 +21,7 @@ change as it is rewritten. `@-` is its parent.
    `jj new`, inspect `@-` to verify the completed change and `@` to verify it
    is empty.
 
-Use the [finish-a-change recipe](references/recipes/finish-a-change.md) when
-the request explicitly finishes an ordinary change. Do not add a bookmark for
-local completion alone.
+Do not add a bookmark for local completion alone.
 
 ## Scope
 

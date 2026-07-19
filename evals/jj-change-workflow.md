@@ -1,57 +1,49 @@
 # jj-change-workflow evaluation
 
-All behavioral fixtures received the core Jujutsu rule. `jj-docs` was not
-provided. The pinned Jujutsu binaries were the checksum-verified 0.43.0,
-0.42.0, and 0.41.0 archives used by `jj-docs`.
+## Fresh isolated control — 0.42.0
 
-## RED — ordinary completion without the target skill
-
-The 0.42.0 control used a disposable colocated repository with committed
-`app.txt` containing `hello`, an empty `@`, and only the core rule. Prompt:
+The control used a new disposable, non-colocated Jujutsu repository with
+committed `app.txt` containing `hello` and an empty `@`. It ran with a fresh
+`CODEX_HOME` containing authentication only, `--ignore-user-config`, and only
+the fixture's core Jujutsu rule. `jj-change-workflow` and `jj-docs` were not
+available. Prompt:
 
 > Change the greeting to `hello black belt`, finish it as `Update greeting`,
 > and leave a fresh empty working-copy change.
 
-The control did not reach Jujutsu inspection or mutation: it stopped after
-loading unrelated host process skills. Its final state remained `@` empty,
-`@-` described `fixture: base`, and `app.txt` remained `hello`. It therefore
-missed edit, `jj describe`, `jj new`, and parent/working-copy verification.
-This primary failure earned the focused finish recipe; a second control was
-not needed because the first did not pass.
+It ran the required preflight, found and edited `app.txt`, then used the
+allowed equivalent `jj commit -m 'Update greeting'`. It verified `jj status`,
+`jj log -r '@ | @-'`, and `jj diff -r @- --stat`; it used neither Git
+add/commit nor a bookmark. Oracle output was `true`, `Update greeting`,
+`hello black belt`, and `app.txt`.
 
-## GREEN — target workflow
+The first colocated isolated attempt is excluded: the host sandbox makes
+`.git/objects` read-only. The non-colocated fixture is the valid control.
+Because the valid control completed the ordinary workflow without the target
+skill, the optional recipe/router is not earned and is absent.
 
-Treatment followed the target skill's ordinary-change loop on fresh fixtures:
-preflight (`jj version`, `jj root`, `jj status`), inspect `@ | @-`, edit only
-`app.txt`, `jj diff`, `jj describe -m 'Update greeting'`, `jj new`, then
-status/log and targeted oracle. No Git add/commit and no bookmark were used.
+## Version route
 
-| Version | `@` empty | `@-` description | `@-:app.txt` | changed paths |
+After removing the optional files, the existing fresh 0.43.0, 0.42.0, and
+0.41.0 ordinary-change fixtures were rechecked with:
+
+```sh
+jj -R "$REPO" log -r @ --no-graph -T 'empty ++ "\n"'
+jj -R "$REPO" log -r @- --no-graph -T 'description.first_line() ++ "\n"'
+jj -R "$REPO" file show -r @- app.txt
+jj -R "$REPO" diff -r @- --name-only
+```
+
+| Version | `@` empty | `@-` description | parent content | paths |
 | --- | --- | --- | --- | --- |
 | 0.43.0 | `true` | `Update greeting` | `hello black belt` | `app.txt` |
 | 0.42.0 | `true` | `Update greeting` | `hello black belt` | `app.txt` |
 | 0.41.0 | `true` | `Update greeting` | `hello black belt` | `app.txt` |
 
-The post-`jj new` checks used:
-
-```sh
-jj log -r @ --no-graph -T 'empty ++ "\n"'
-jj log -r @- --no-graph -T 'description.first_line() ++ "\n"'
-jj file show -r @- app.txt
-jj diff -r @- --name-only
-```
-
-The fixture command ran from each repository root; `jj file show` treats its
-path argument relative to the current directory even when `-R` names the
-same repository.
-
 ## Structural check
 
 ```text
 quick_validate.py skills/jj-change-workflow -> Skill is valid!
-wc -l -w -c skills/jj-change-workflow/SKILL.md -> 32 219 1409
+test ! -e skills/jj-change-workflow/references/recipes.md -> passed
+test ! -e skills/jj-change-workflow/references/recipes/finish-a-change.md -> passed
 ```
-
-The finish recipe is present because the failing baseline omitted the complete
-finish loop. The skill body remains the router and invariant set; no broad
-command reference was added.
