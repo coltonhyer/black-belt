@@ -52,7 +52,11 @@ list both exited zero. Installation validated nine skills; the list showed an
 enabled `black-belt` import with only the `skills` component. Bounded
 noninteractive inventory and `jj-docs` probes exited 1 without stdout or
 stderr; the separate bounded runtime at
-`/private/tmp/black-belt-agy-runtime.1795` had the same result. Rule
-activation, runtime inventory, progressive disclosure, repository-only
+`/private/tmp/black-belt-agy-runtime.1795` had the same result. A no-plugin
+diagnostic in the restricted runner then showed that Antigravity could not
+create its local language-server port (`bind: operation not permitted`). An
+elevated disposable retry was not run because it could export local plugin or
+workspace content to a third-party runtime without explicit user approval.
+Rule activation, runtime inventory, progressive disclosure, repository-only
 discovery, and state refresh are therefore untested. This is an unavailable
 runtime, not evidence that `rules/jujutsu-agent.md` failed to activate.
