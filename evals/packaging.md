@@ -41,3 +41,21 @@ Claude reported `Validation passed`; Antigravity reported nine processed
 skills and no MCP servers or hooks; the Codex validator reported `Plugin
 validation passed`. These are structural checks only; host skill discovery and
 Antigravity rule activation remain Task 13 gates.
+
+## Core-rule hook packaging
+
+The later core-rule repair adds `hooks/hooks.json` and
+`hooks/jujutsu-context.mjs`. Codex discovers that default hook path without a
+manifest field, which preserves compatibility with the strict local Codex
+manifest validator. Claude Code registers the same file through
+`.claude-plugin/plugin.json`. The final checks passed:
+
+```sh
+claude plugin validate .claude-plugin/plugin.json
+uv run --with pyyaml python \
+  /Users/colton/.codex/skills/.system/plugin-creator/scripts/validate_plugin.py .
+node --check hooks/jujutsu-context.mjs
+```
+
+Antigravity intentionally has no root `hooks.json`: its documented plugin
+`rules/` component carries the canonical rule instead.

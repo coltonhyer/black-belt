@@ -49,14 +49,18 @@ disclosure, and state refresh remain untested.
 
 At `/private/tmp/black-belt-agy-discovery.5hWlge`, local plugin install and
 list both exited zero. Installation validated nine skills; the list showed an
-enabled `black-belt` import with only the `skills` component. Bounded
-noninteractive inventory and `jj-docs` probes exited 1 without stdout or
-stderr; the separate bounded runtime at
-`/private/tmp/black-belt-agy-runtime.1795` had the same result. A no-plugin
-diagnostic in the restricted runner then showed that Antigravity could not
-create its local language-server port (`bind: operation not permitted`). An
-elevated disposable retry was not run because it could export local plugin or
-workspace content to a third-party runtime without explicit user approval.
+enabled `black-belt` import with only the `skills` component. The validator
+does not report rules, but an isolated install staged
+`rules/jujutsu-agent.md` byte-for-byte. Bounded noninteractive inventory and
+`jj-docs` probes exited 1 without stdout or stderr; the separate bounded
+runtime at `/private/tmp/black-belt-agy-runtime.1795` had the same result. A
+no-plugin diagnostic in the restricted runner then showed that Antigravity
+could not create its local language-server port (`bind: operation not
+permitted`).
+
+After explicit authorization, an elevated disposable runtime started correctly
+but required interactive Google authentication and timed out waiting for it.
 Rule activation, runtime inventory, progressive disclosure, repository-only
-discovery, and state refresh are therefore untested. This is an unavailable
-runtime, not evidence that `rules/jujutsu-agent.md` failed to activate.
+discovery, and state refresh are therefore still untested. This is an
+authentication gate, not evidence that `rules/jujutsu-agent.md` failed to
+activate.

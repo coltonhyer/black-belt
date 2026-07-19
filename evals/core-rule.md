@@ -47,9 +47,17 @@ did not explicitly order it ahead of skill selection. The rule now says that
 the preflight is the first repository action and must occur before selecting,
 invoking, or reading a skill, inspecting a repository file, or making a plan.
 
-The source-rule treatment at
-`/private/tmp/black-belt-codex-preflight-source.4Cxg00` loaded the actual
-`rules/jujutsu-agent.md` into a disposable Codex home with the installed
-plugin. Its first command was `jj version && jj root && jj status`; only then
-did it read `jj-change-workflow`. The full two-session refresh attempt is
-recorded in `evals/host-state-refresh.md`.
+A source-rule treatment at
+`/private/tmp/black-belt-codex-preflight-source.4Cxg00` then showed that the
+wording works when Codex has the rule as context: its first command was `jj
+version && jj root && jj status`, followed by `jj-change-workflow`.
+
+That treatment did not prove plugin injection. A normal installed plugin did
+not load its packaged `AGENTS.md` before skill selection. The source now uses
+the documented default `hooks/hooks.json` path to inject the canonical rule at
+Codex SessionStart and SubagentStart. The fresh installed-plugin fixture at
+`/private/tmp/black-belt-codex-refresh-hooked.nQ8lSq` proved the hook path:
+both sessions ran the full preflight before their first skill body. The
+two-session state-refresh oracle is recorded in
+`evals/host-state-refresh.md`. The fixture bypassed hook trust only because it
+was disposable; installed users must review and trust the hook normally.

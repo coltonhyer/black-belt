@@ -25,19 +25,25 @@ For Antigravity:
 agy plugin install /path/to/black-belt
 ```
 
-## Enable the core rule
+## Core rule
 
-Plugin installation exposes skills; it does not overwrite global instructions.
-Merge—not replace—[`rules/jujutsu-agent.md`](rules/jujutsu-agent.md) into the
-active instruction file:
+Black Belt ships a compact rule declaring the agent a Jujutsu agent. It starts
+repository work with `jj version`, `jj root`, and `jj status` when applicable;
+uses Jujutsu rather than Git; and offers—but never assumes—`jj git init
+--colocate .`.
 
-- Codex: use `$CODEX_HOME/AGENTS.override.md` when it exists and is non-empty;
-  otherwise use `$CODEX_HOME/AGENTS.md`.
-- Claude Code: use `~/.claude/CLAUDE.md`.
-- Antigravity: the enabled plugin is expected to discover
-  `rules/jujutsu-agent.md`, but automatic always-on activation remains pending
-  Task 13 verification. Merge it into `~/.gemini/GEMINI.md` when you need the
-  guarantee before that verification lands.
+Codex injects this rule through the bundled SessionStart and SubagentStart
+hook. Review and trust that hook after installing the plugin: it only reads
+[`rules/jujutsu-agent.md`](rules/jujutsu-agent.md) from the installed plugin
+and returns it as agent context. Claude Code packages the same hook adapter;
+its disposable runtime check remains authentication-gated. Antigravity uses
+the documented plugin `rules/` directory; its rule was staged successfully,
+while a fresh-home runtime check still needs interactive Google sign-in.
+
+If a host cannot run the bundled hook or rule, merge—not replace—the canonical
+rule into that host's global guidance. The catalog checkout's
+[`AGENTS.md`](AGENTS.md) already contains the same rule for work in this
+repository.
 
 The rule makes the agent prefer Jujutsu for repository state and history. It
 does not fall back to Git, and it never initializes a repository on its own:
@@ -63,8 +69,8 @@ maintenance skill, not part of the distributed plugin.
 
 ## Scope
 
-v0.1 has no MCP servers, hooks, or apps. It provides instructions and skills
-only.
+Black Belt bundles skills and compact core-rule hooks for Codex and Claude
+Code. It does not bundle an MCP server or app.
 
 ## License
 

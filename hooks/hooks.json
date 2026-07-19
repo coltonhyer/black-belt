@@ -1,0 +1,31 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/jujutsu-context.mjs\" SessionStart",
+            "commandWindows": "if (Get-Command node -ErrorAction SilentlyContinue) { node \"$env:CLAUDE_PLUGIN_ROOT\\hooks\\jujutsu-context.mjs\" SessionStart }",
+            "timeout": 5,
+            "statusMessage": "Loading Jujutsu context"
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/jujutsu-context.mjs\" SubagentStart",
+            "commandWindows": "if (Get-Command node -ErrorAction SilentlyContinue) { node \"$env:CLAUDE_PLUGIN_ROOT\\hooks\\jujutsu-context.mjs\" SubagentStart }",
+            "timeout": 5,
+            "statusMessage": "Loading Jujutsu context"
+          }
+        ]
+      }
+    ]
+  }
+}
