@@ -61,3 +61,14 @@ both sessions ran the full preflight before their first skill body. The
 two-session state-refresh oracle is recorded in
 `evals/host-state-refresh.md`. The fixture bypassed hook trust only because it
 was disposable; installed users must review and trust the hook normally.
+
+An authenticated Claude Code `--plugin-dir` run then emitted the canonical
+SessionStart context. Its first Bash command was the full preflight, followed
+by `black-belt:jj-change-workflow`; a fresh second session passed the state
+refresh oracle with no Git command.
+
+An authenticated Antigravity run reported a preflight before reading
+`state.txt`, but its command tool begins in a host scratch directory and first
+used workspace discovery that did not read a repository file. Its fresh
+state-refresh attempt timed out on an Antigravity invalid tool-call signature
+before any fixture mutation, so it is not a completed runtime pass.

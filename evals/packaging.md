@@ -39,8 +39,9 @@ uv run --with pyyaml python \
 
 Claude reported `Validation passed`; Antigravity reported nine processed
 skills and no MCP servers or hooks; the Codex validator reported `Plugin
-validation passed`. These are structural checks only; host skill discovery and
-Antigravity rule activation remain Task 13 gates.
+validation passed`. These are structural checks; authenticated runtime evidence
+is recorded separately in `evals/host-discovery.md` and
+`evals/host-state-refresh.md`.
 
 ## Core-rule hook packaging
 

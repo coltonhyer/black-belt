@@ -35,7 +35,15 @@ is `root:"state.txt"`, not bare `state.txt`.
 
 ## Claude Code and Antigravity
 
-Claude state refresh was not attempted because its disposable home is logged
-out. Antigravity state refresh was not attempted because its fresh disposable
-home requires interactive Google authentication. Neither host has a
-state-refresh runtime pass recorded.
+The authenticated Claude fixture at
+`/private/tmp/black-belt-claude-runtime.1zA3YG` used the session-only plugin
+path. Its first and fresh continuation sessions each preflighted before
+`black-belt:jj-change-workflow`; the continuation appended `continued`,
+described the change exactly `Continue after refresh`, and created an empty
+`@`. The Jujutsu oracle passed and neither trace contained a Git command.
+
+The authenticated Antigravity fixture reported preflight before a read, but
+did not complete state refresh. Its model emitted an invalid command-tool
+signature and the host timed out before any fixture mutation. The final
+fixture therefore remained an empty `@` over the externally prepared `after`
+parent; this is recorded as a host-runtime block, not a catalog pass.

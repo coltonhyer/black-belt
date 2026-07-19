@@ -2,11 +2,11 @@
 
 ## Versions and structural gates
 
-| Host | Version | Disposable-home result |
+| Host | Version | Fixture result |
 | --- | --- | --- |
 | Codex CLI | `0.144.6` | Marketplace install and two runtime probes completed. |
-| Claude Code | `2.1.214` | Marketplace install completed; runtime is logged out. |
-| Antigravity | `1.0.10` | Local plugin install completed; noninteractive runtime exited 1 without output. |
+| Claude Code | `2.1.214` | Session-only plugin run and two-session state refresh passed. |
+| Antigravity | `1.0.10` | Authenticated core-rule read passed; skill and state-refresh runs hit host timeouts. |
 
 All ten skill validators and the Codex, Claude, and Antigravity manifest
 validators exited zero. The public catalog contained exactly the nine approved
@@ -40,10 +40,12 @@ Every Codex disposable credential copy was removed and then checked absent.
 
 At `/private/tmp/black-belt-claude-discovery.y2rskd`, marketplace add, plugin
 install, and plugin details all exited zero. Plugin details reported the same
-nine public skills and no maintenance skill. `claude auth status` exited 1 and
-reported `loggedIn: false`, `authMethod: none`. No credentials were copied, so
-Claude runtime inventory, invocation, repository-only discovery, progressive
-disclosure, and state refresh remain untested.
+nine public skills and no maintenance skill. A later authenticated,
+session-only `--plugin-dir` fixture ran the canonical SessionStart hook; its
+first Bash command was `jj version && jj root && jj status`, then it invoked
+`black-belt:jj-change-workflow`. A fresh second session passed the full state
+refresh oracle. No credential was copied and no persistent plugin setting was
+changed.
 
 ## Antigravity
 
@@ -58,9 +60,13 @@ no-plugin diagnostic in the restricted runner then showed that Antigravity
 could not create its local language-server port (`bind: operation not
 permitted`).
 
-After explicit authorization, an elevated disposable runtime started correctly
-but required interactive Google authentication and timed out waiting for it.
-Rule activation, runtime inventory, progressive disclosure, repository-only
-discovery, and state refresh are therefore still untested. This is an
-authentication gate, not evidence that `rules/jujutsu-agent.md` failed to
-activate.
+With the existing authenticated session and a temporary local install, a
+one-line control prompt passed. A focused core-rule run reported a preflight
+before reading `state.txt`, then made no mutation. Antigravity's command tool
+starts in a host scratch directory, so the agent first used workspace
+discovery that did not read a repository file. A skill-invocation probe timed
+out in directory exploration, and the fresh state-refresh attempt hit an
+Antigravity invalid tool-call signature before any fixture mutation. The
+temporary `black-belt`
+install is removed after evaluation. These are host-runtime limitations, not
+evidence that the staged rule failed to load.

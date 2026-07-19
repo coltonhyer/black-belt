@@ -36,9 +36,11 @@ Codex injects this rule through the bundled SessionStart and SubagentStart
 hook. Review and trust that hook after installing the plugin: it only reads
 [`rules/jujutsu-agent.md`](rules/jujutsu-agent.md) from the installed plugin
 and returns it as agent context. Claude Code packages the same hook adapter;
-its disposable runtime check remains authentication-gated. Antigravity uses
-the documented plugin `rules/` directory; its rule was staged successfully,
-while a fresh-home runtime check still needs interactive Google sign-in.
+an authenticated session-only runtime test passed its preflight and
+two-session state refresh. Antigravity uses the documented plugin `rules/`
+directory; an authenticated read-only run preflighted before reading a
+repository file, but its state-refresh run is currently blocked by an
+Antigravity tool-call timeout.
 
 If a host cannot run the bundled hook or rule, merge—not replace—the canonical
 rule into that host's global guidance. The catalog checkout's
