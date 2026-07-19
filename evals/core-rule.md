@@ -67,6 +67,12 @@ SessionStart context. Its first Bash command was the full preflight, followed
 by `black-belt:jj-change-workflow`; a fresh second session passed the state
 refresh oracle with no Git command.
 
+The confirmed manual Antigravity Flash failure that motivated the root-hook
+bridge read `jj-change-workflow/SKILL.md` before any preflight, then ran only
+`jj status`, `jj log -r '@ | @-'`, and `jj diff`, omitting `jj version` and
+`jj root`. The new root `hooks.json` PreInvocation reinforcement awaits a
+fresh authenticated runtime retest; this is not a runtime-pass claim.
+
 An authenticated Antigravity run reported a preflight before reading
 `state.txt`, but its command tool begins in a host scratch directory and first
 used workspace discovery that did not read a repository file. Its fresh

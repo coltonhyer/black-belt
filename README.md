@@ -39,7 +39,10 @@ and returns it as agent context. Claude Code packages the same hook adapter;
 an authenticated session-only runtime test passed its preflight and
 two-session state refresh. Antigravity reinforces its documented plugin
 `rules/` directory with a root `hooks.json` PreInvocation hook; a fresh
-authenticated runtime retest is awaiting completion.
+authenticated runtime retest is awaiting completion. The confirmed manual
+Flash failure that motivated this bridge read `jj-change-workflow/SKILL.md`
+before any preflight, then ran only `jj status`, `jj log -r '@ | @-'`, and
+`jj diff`, omitting `jj version` and `jj root`.
 
 If a host cannot run the bundled hook or rule, merge—not replace—the canonical
 rule into that host's global guidance. The catalog checkout's
