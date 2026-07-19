@@ -353,8 +353,10 @@ Skills are developed one at a time using behavior-first evaluation:
    always-on rule. Withhold the target and sibling skills from the control; add
    only the target skill to the treatment. This isolates the skill's value
    instead of allowing generic Git fallback to dominate the baseline.
-3. Write the smallest skill and references that address the observed baseline
-   failure.
+3. Write the smallest stable body for each approved top-level skill: its scope,
+   safety invariants, compact decision process, verification route, and live
+   documentation pointer. Add references only when an observed baseline
+   failure needs drill-down guidance.
 4. Repeat the task in an otherwise equivalent treatment context.
 5. Capture the agent's command or tool trace and verify both required actions
    (preflight, consent, and verification where applicable) and forbidden Git
@@ -365,7 +367,9 @@ Skills are developed one at a time using behavior-first evaluation:
    evaluating the result.
 8. Exercise a compaction or handoff scenario on each primary host to verify that
    the agent re-establishes current repository state.
-9. Add guidance only when another scenario exposes a real gap.
+9. Add detailed guidance, recipes, routers, and version deltas only when
+   another scenario exposes a real gap. A passing control leaves the approved
+   top-level skill compact; it does not remove it from the catalog.
 
 Catalog release gates are:
 

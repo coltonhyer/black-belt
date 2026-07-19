@@ -83,13 +83,16 @@ All mutating GREEN runs must show `jj version`, `jj root`, and `jj status`
 before mutation, followed by `jj status` and a targeted `jj diff` or `jj log`.
 Read-only runs must show that the graph and working-copy state did not change.
 
-If repeated controls already satisfy the full oracle without the target skill,
-run a second realistic scenario from that skill's advertised trigger. If fresh
-controls repeatedly pass both, stop and ask for design approval to merge or
-drop the skill instead of adding speculative instructions. Update the approved
-design, README table, manifest/discovery assertions, and release counts to the
-approved surviving catalog; never author a skill merely to preserve the
-planned count of nine.
+The nine approved public top-level skills are catalog commitments, not prizes
+that must be earned by a failing control. Evaluation determines the smallest
+useful body and whether a lazy recipe, router, or other drill-down detail is
+earned. If a control already satisfies the full oracle without the target
+skill, run the second realistic scenario from that skill's advertised trigger.
+If fresh controls pass both, retain the compact top-level `SKILL.md` and record
+the passing evidence, but add no recipe/router or operation-specific prose
+that the evidence did not justify. Merge or drop a top-level skill only after a
+separate user-directed catalog change; never add speculative detail merely to
+preserve the planned count of nine.
 
 Use these bounded second probes only when the primary control repeatedly
 passes:
