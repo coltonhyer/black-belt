@@ -1,0 +1,16 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "black-belt",
+  "description": "Jujutsu-first workflows for coding agents.",
+  "owner": {
+    "name": "Colton Hyer"
+  },
+  "plugins": [
+    {
+      "name": "black-belt",
+      "source": "./",
+      "description": "Jujutsu-first workflows for coding agents.",
+      "category": "development"
+    }
+  ]
+}

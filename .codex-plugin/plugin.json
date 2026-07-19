@@ -1,0 +1,24 @@
+{
+  "name": "black-belt",
+  "version": "0.1.0",
+  "description": "Jujutsu-first workflows for coding agents.",
+  "author": {
+    "name": "Colton Hyer"
+  },
+  "license": "MIT",
+  "keywords": ["jujutsu", "jj", "version-control", "agent-skills"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Black Belt",
+    "shortDescription": "Jujutsu-first workflows for coding agents",
+    "longDescription": "Use Jujutsu safely with focused workflows, lazy recipes, and installed-version guidance.",
+    "developerName": "Colton Hyer",
+    "category": "Developer Tools",
+    "capabilities": ["Instructions"],
+    "defaultPrompt": [
+      "Help me complete this task using Jujutsu.",
+      "Safely edit this Jujutsu change stack.",
+      "Recover this repository with Jujutsu."
+    ]
+  }
+}

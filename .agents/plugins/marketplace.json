@@ -1,0 +1,20 @@
+{
+  "name": "black-belt",
+  "interface": {
+    "displayName": "Black Belt"
+  },
+  "plugins": [
+    {
+      "name": "black-belt",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}

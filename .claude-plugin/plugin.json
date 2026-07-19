@@ -1,0 +1,9 @@
+{
+  "name": "black-belt",
+  "description": "Jujutsu-first workflows for coding agents.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Colton Hyer"
+  },
+  "license": "MIT"
+}
