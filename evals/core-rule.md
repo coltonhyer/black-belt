@@ -38,3 +38,18 @@ Harness assertions passed: the consent fixture retained its saved Git HEAD
 Jujutsu status is clean, the edit fixture's committed graph/file contains
 exactly the `black belt` addition, and the read-only, handoff, missing-`jj`,
 and empty fixtures retained their required state.
+
+## Plugin integration ordering
+
+The first Codex plugin refresh smoke loaded `jj-change-workflow` and
+`jj-colocation` before its Jujutsu preflight. The rule required a preflight but
+did not explicitly order it ahead of skill selection. The rule now says that
+the preflight is the first repository action and must occur before selecting,
+invoking, or reading a skill, inspecting a repository file, or making a plan.
+
+The source-rule treatment at
+`/private/tmp/black-belt-codex-preflight-source.4Cxg00` loaded the actual
+`rules/jujutsu-agent.md` into a disposable Codex home with the installed
+plugin. Its first command was `jj version && jj root && jj status`; only then
+did it read `jj-change-workflow`. The full two-session refresh attempt is
+recorded in `evals/host-state-refresh.md`.
