@@ -302,7 +302,9 @@ installation has two explicit steps:
 
 Antigravity discovers the canonical `rules/jujutsu-agent.md` from the enabled
 plugin and reinforces it at every PreInvocation with the root `hooks.json`.
-A fresh authenticated runtime retest is pending, so this is documented
+It injects on every PreInvocation because Antigravity's compaction-reset
+semantics are undocumented; this is a deliberate compatibility choice. A
+fresh authenticated runtime retest is pending, so this is documented
 reinforcement rather than a runtime-pass claim. A global copy is only useful
 if the user wants Jujutsu-first behavior while the plugin is disabled.
 

@@ -1,11 +1,12 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 
-const root = fileURLToPath(new URL("..", import.meta.url));
-const output = execFileSync("node", ["hooks/antigravity-jujutsu-context.mjs"], {
-  cwd: root,
+const script = fileURLToPath(new URL("../hooks/antigravity-jujutsu-context.mjs", import.meta.url));
+const output = execFileSync("node", [script], {
+  cwd: tmpdir(),
   encoding: "utf8",
 });
 
