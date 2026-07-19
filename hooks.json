@@ -1,0 +1,11 @@
+{
+  "black-belt-jujutsu-context": {
+    "PreInvocation": [
+      {
+        "type": "command",
+        "command": "node ./hooks/antigravity-jujutsu-context.mjs",
+        "timeout": 5
+      }
+    ]
+  }
+}

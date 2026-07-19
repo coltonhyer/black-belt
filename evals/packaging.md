@@ -58,5 +58,6 @@ uv run --with pyyaml python \
 node --check hooks/jujutsu-context.mjs
 ```
 
-Antigravity intentionally has no root `hooks.json`: its documented plugin
-`rules/` component carries the canonical rule instead.
+Antigravity now reinforces its documented plugin `rules/` component with a
+root `hooks.json` PreInvocation hook. The documented reinforcement awaits a
+fresh authenticated runtime retest; this does not claim that retest passed.

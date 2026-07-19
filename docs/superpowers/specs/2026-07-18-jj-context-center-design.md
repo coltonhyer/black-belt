@@ -292,7 +292,7 @@ black-belt/
 |---|---|---|
 | Codex | `.codex-plugin/plugin.json` and Codex marketplace metadata | Active `$CODEX_HOME/AGENTS.override.md`, or `$CODEX_HOME/AGENTS.md` when no non-empty override exists |
 | Claude Code | `.claude-plugin/plugin.json` and marketplace metadata | `~/.claude/CLAUDE.md` |
-| Antigravity | Root `plugin.json` | Plugin `rules/jujutsu-agent.md`, loaded automatically |
+| Antigravity | Root `plugin.json` and `hooks.json` | Plugin `rules/jujutsu-agent.md`, reinforced by a PreInvocation hook; fresh authenticated runtime retest pending |
 
 Every adapter exposes the same root `skills/` directory. Codex and Claude Code
 installation has two explicit steps:
@@ -300,10 +300,11 @@ installation has two explicit steps:
 1. Install the plugin.
 2. Merge the short canonical rule into the host's global instructions.
 
-Antigravity loads the canonical `rules/jujutsu-agent.md` directly from the
-enabled plugin, so copying it again into `~/.gemini/GEMINI.md` would duplicate
-the rule. A global copy is only useful if the user wants Jujutsu-first behavior
-while the plugin is disabled.
+Antigravity discovers the canonical `rules/jujutsu-agent.md` from the enabled
+plugin and reinforces it at every PreInvocation with the root `hooks.json`.
+A fresh authenticated runtime retest is pending, so this is documented
+reinforcement rather than a runtime-pass claim. A global copy is only useful
+if the user wants Jujutsu-first behavior while the plugin is disabled.
 
 The root `AGENTS.md` applies the same rule while this repository is being
 developed. `.claude/CLAUDE.md` imports it with `@../AGENTS.md` because Claude
