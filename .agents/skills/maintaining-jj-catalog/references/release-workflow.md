@@ -99,6 +99,21 @@ asserting progressive disclosure where a host trace cannot prove it. Record
 facts, versions, command exits, and limitations concisely in the matching
 evaluation.
 
+Run the host-manifest sync gate so shared metadata does not drift when the
+version bumps:
+
+```sh
+.agents/skills/maintaining-jj-catalog/scripts/check-manifest-sync.sh
+```
+
+It compares the fields that must agree across every host manifest — top-level
+`name`, `description`, `version`, and the author/owner display name — and
+confirms the hooks file the Claude manifest references exists. Host-specific
+fields are intentionally not compared: `plugin.json` (Antigravity) carries no
+`version`, and each host keeps its own `interface`/`keywords` block. When a
+release bumps the version, update `.claude-plugin/plugin.json` and
+`.codex-plugin/plugin.json` together and re-run the gate.
+
 Before and after a checkpoint, inspect only the intended release change:
 
 ```sh
