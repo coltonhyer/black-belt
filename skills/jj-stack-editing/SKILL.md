@@ -20,6 +20,23 @@ revisions. Select the intended changes by change ID, never by description.
    identities, affected content, and conflicts in the rewritten subgraph.
    Verify the working-copy change separately when it is a descendant.
 
+## Non-interactive editing
+
+Prefer non-interactive forms so no command blocks on an editor. Split by naming
+paths (`jj split <fileset>`) rather than the interactive selection, and move
+changes with `jj squash --into <revision>` or `jj absorb` rather than `jj
+squash -i` or `jj diffedit`. When only an interactive tool can express the edit,
+first confirm a non-interactive diff editor is configured; do not launch a
+blocking editor.
+
+## Immutable revisions
+
+A rewrite may fail because the target is immutable. That is a configured
+guardrail defined by the `immutable_heads()` revset alias, not an error to force
+past. Inspect the alias and the selected revision, then edit the intended
+mutable change instead. Never override immutability merely to make a command
+succeed.
+
 Use `jj-docs` to resolve installed-version syntax and behavior before relying
 on an editing command. Route conflict resolution and recovery to their
 specialized skills.

@@ -11,7 +11,9 @@ graph merely to make the conflict disappear.
 
 1. Inspect the conflicted revision, its parents, relevant descendants, and
    the conflicted paths. Determine the intended content before editing.
-2. Edit the conflicted file to that result, or use the configured merge tool.
+2. Edit the conflict markers in the file directly to that result. Do not launch
+   an interactive merge tool; bare `jj resolve` opens one. Only fall back to
+   `jj resolve --tool <name>` when a non-interactive tool is configured.
    Preserve the intended parent graph; do not silently choose one side or drop
    a parent just to remove a conflict.
 3. Verify the conflict set is now as intended, then inspect affected

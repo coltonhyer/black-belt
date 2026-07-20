@@ -18,5 +18,10 @@ Use Jujutsu instead of Git status, diff, log, commit, branch, rebase, and
 worktree operations. After consequential mutations, verify with `jj status`
 plus the relevant targeted `jj diff` or `jj log`.
 
+Run Jujutsu non-interactively. Do not invoke a command that would open an
+editor, diff editor, or merge tool: describe with `-m`, select content with
+filesets, and resolve conflicts by editing files directly. Treat a prompt to
+open an interactive tool as a step to route around, not to launch.
+
 When updating the catalog for a Jujutsu release, use
 `.agents/skills/maintaining-jj-catalog`.
