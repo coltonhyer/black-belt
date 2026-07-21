@@ -1,0 +1,7 @@
+# Superstore archive ledger sidecar files (ledger.db itself is tracked)
+.agents/ledger.db-journal
+.agents/ledger.db-wal
+.agents/ledger.db-shm
+
+# macOS
+.DS_Store

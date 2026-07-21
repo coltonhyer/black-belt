@@ -3,27 +3,36 @@
 Black Belt is a Jujutsu-first skill catalog for coding agents. It supports
 Jujutsu 0.43, 0.42, and 0.41.
 
+## Prerequisites
+
+- [Jujutsu](https://jj-vcs.github.io/jj/latest/install-and-setup/) 0.41, 0.42,
+  or 0.43 on your `PATH`.
+- Node.js, for the Claude Code and Antigravity hooks that inject the core rule.
+
 ## Install
 
-For a local checkout in Codex:
+For Codex:
 
 ```sh
-codex plugin marketplace add /path/to/black-belt
+codex plugin marketplace add coltonhyer/black-belt
 codex plugin add black-belt@black-belt
 ```
 
 For Claude Code:
 
 ```sh
-claude plugin marketplace add /path/to/black-belt --scope user
+claude plugin marketplace add coltonhyer/black-belt --scope user
 claude plugin install black-belt@black-belt --scope user
 ```
 
 For Antigravity:
 
 ```sh
-agy plugin install /path/to/black-belt
+agy plugin install https://github.com/coltonhyer/black-belt
 ```
+
+Restart the session after installing so the rule loads, then confirm the agent
+runs its `jj` preflight instead of reaching for Git.
 
 ## Core rule
 
