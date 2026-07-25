@@ -969,7 +969,7 @@ The catalog's largest content gap. Agents run builds and test suites constantly;
 - The global flag `--ignore-working-copy` skips snapshotting for one command.
 - `jj util snapshot` snapshots the working copy on demand.
 
-- [ ] **Step 1: Write the skill**
+- [x] **Step 1: Write the skill**
 
 Create `skills/jj-working-copy/SKILL.md`:
 
@@ -1028,12 +1028,12 @@ Route ordinary change work to `jj-change-workflow` and use `jj-docs` to
 resolve installed-version behavior for tracking or snapshot configuration.
 ```
 
-- [ ] **Step 2: Verify the gates accept it**
+- [x] **Step 2: Verify the gates accept it**
 
 Run: `npm test`
 Expected: FAIL on the README coverage test with `README.md does not mention public skill \`jj-working-copy\``. This confirms Task 2's gate is doing its job.
 
-- [ ] **Step 3: Add the README table row**
+- [x] **Step 3: Add the README table row**
 
 In `README.md`, add this row to the Public skills table, immediately after the `jj-change-workflow` row:
 
@@ -1041,7 +1041,7 @@ In `README.md`, add this row to the Public skills table, immediately after the `
 | `jj-working-copy` | Snapshotting, ignores, and file tracking |
 ```
 
-- [ ] **Step 4: Route to it from `jj-change-workflow`**
+- [x] **Step 4: Route to it from `jj-change-workflow`**
 
 In `skills/jj-change-workflow/SKILL.md`, replace the Scope paragraph:
 
@@ -1062,12 +1062,12 @@ tracking to `jj-working-copy` before running a build or test suite. Use
 behavior.
 ```
 
-- [ ] **Step 5: Run the full harness**
+- [x] **Step 5: Run the full harness**
 
 Run: `npm test`
 Expected: exit 0. The command probe must confirm `jj file untrack`, `jj file track`, and `--ignore-working-copy` all exist on the installed binary.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 jj status
@@ -1102,7 +1102,7 @@ The highest-risk skill is the least concrete. `jj rebase -r` vs `-s` vs `-b` is 
 - `jj duplicate` copies content to new changes; with none of `--onto`, `--insert-after`, `--insert-before` it duplicates onto existing parents.
 - `jj abandon` removes a revision and rebases its descendants onto its parents. Abandoning the working-copy commit yields a new empty one.
 
-- [ ] **Step 1: Write the recipe index**
+- [x] **Step 1: Write the recipe index**
 
 Create `skills/jj-stack-editing/references/recipes.md`:
 
@@ -1114,7 +1114,7 @@ Create `skills/jj-stack-editing/references/recipes.md`:
 - [Insert, duplicate, abandon](recipes/insert-duplicate-abandon.md) — add a change mid-stack, copy one, or drop one.
 ```
 
-- [ ] **Step 2: Write the rebase recipe**
+- [x] **Step 2: Write the rebase recipe**
 
 Create `skills/jj-stack-editing/references/recipes/choose-a-rebase-form.md`:
 
@@ -1169,7 +1169,7 @@ If the rebase reports an immutable target, stop. That is the
 `immutable_heads()` guardrail, not an obstacle to force past.
 ```
 
-- [ ] **Step 3: Write the split/squash recipe**
+- [x] **Step 3: Write the split/squash recipe**
 
 Create `skills/jj-stack-editing/references/recipes/split-and-move-changes.md`:
 
@@ -1226,7 +1226,7 @@ edit can express the change, first confirm a non-interactive diff editor is
 configured; do not launch a blocking tool.
 ```
 
-- [ ] **Step 4: Write the insert/duplicate/abandon recipe**
+- [x] **Step 4: Write the insert/duplicate/abandon recipe**
 
 Create `skills/jj-stack-editing/references/recipes/insert-duplicate-abandon.md`:
 
@@ -1272,7 +1272,7 @@ Abandoning is recoverable: `jj undo` reverses it, and `jj op log` retains the
 prior state. Route anything beyond a single reversal to `jj-recovery`.
 ```
 
-- [ ] **Step 5: Link the recipes from the skill**
+- [x] **Step 5: Link the recipes from the skill**
 
 In `skills/jj-stack-editing/SKILL.md`, replace the final paragraph:
 
@@ -1291,13 +1291,13 @@ installed-version syntax and behavior before relying on an editing command.
 Route conflict resolution and recovery to their specialized skills.
 ```
 
-- [ ] **Step 6: Run the harness**
+- [x] **Step 6: Run the harness**
 
 Run: `npm test`
 
 Expected: exit 0. The command probe verifies every flag cited above — `-s`, `-r`, `-b`, `-o`, `-A`, `-B`, `--from`, `--into`, `--onto`, `--insert-after` — against the installed binary. If a flag is reported missing, the recipe is wrong; fix the recipe, never the gate.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 jj status
@@ -1330,7 +1330,7 @@ The skill names `undo`, `op revert`, and `op restore` correctly but never shows 
 - `jj evolog` shows how one change evolved — the commits a change has pointed to.
 - `jj --at-op=<id>` inspects the repo as of an operation without changing anything.
 
-- [ ] **Step 1: Write the recipe index**
+- [x] **Step 1: Write the recipe index**
 
 Create `skills/jj-recovery/references/recipes.md`:
 
@@ -1341,7 +1341,7 @@ Create `skills/jj-recovery/references/recipes.md`:
 - [Choose a recovery command](recipes/choose-a-recovery-command.md) — pick between `undo`, `op revert`, and `op restore`.
 ```
 
-- [ ] **Step 2: Write the operation-log recipe**
+- [x] **Step 2: Write the operation-log recipe**
 
 Create `skills/jj-recovery/references/recipes/read-the-operation-log.md`:
 
@@ -1400,7 +1400,7 @@ This lists the commits that change has pointed to across rewrites, which
 identifies the pre-rewrite commit to restore content from.
 ```
 
-- [ ] **Step 3: Write the command-choice recipe**
+- [x] **Step 3: Write the command-choice recipe**
 
 Create `skills/jj-recovery/references/recipes/choose-a-recovery-command.md`:
 
@@ -1444,7 +1444,7 @@ If recovery would rewrite an immutable revision, stop. That is the
 `immutable_heads()` guardrail, not an obstacle to force past.
 ```
 
-- [ ] **Step 4: Link the recipes from the skill**
+- [x] **Step 4: Link the recipes from the skill**
 
 In `skills/jj-recovery/SKILL.md`, replace the final paragraph:
 
@@ -1461,12 +1461,12 @@ To identify an operation and pick the narrowest reversal, use
 syntax for inspecting an operation or restoring it.
 ```
 
-- [ ] **Step 5: Run the harness**
+- [x] **Step 5: Run the harness**
 
 Run: `npm test`
 Expected: exit 0. The probe verifies `jj op log`, `jj op show`, `jj op diff`, `jj op revert`, `jj op restore`, `jj evolog`, and `jj redo` on the installed binary.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 jj status
@@ -1491,7 +1491,7 @@ Two small gaps: merge changes are uncovered, and `jj-publish` stops one step bef
 
 **Verified facts (jj 0.42.0):** `jj new <a> <b>` creates a merge with both revisions as parents. `jj git push` supports `--remote`, `--bookmark`, `--dry-run`, and `--all`.
 
-- [ ] **Step 1: Add merge coverage to `jj-change-workflow`**
+- [x] **Step 1: Add merge coverage to `jj-change-workflow`**
 
 Insert this section immediately before the `## Scope` heading in `skills/jj-change-workflow/SKILL.md`:
 
@@ -1505,12 +1505,12 @@ parent set afterward with `jj log -r '@ | parents(@)'`. Conflicts that result
 are ordinary first-class conflicts — route them to `jj-conflicts`.
 ```
 
-- [ ] **Step 2: Verify the line limit still holds**
+- [x] **Step 2: Verify the line limit still holds**
 
 Run: `wc -l skills/jj-change-workflow/SKILL.md`
 Expected: at most 70. It was 30 lines before Tasks 7 and 10; if the count exceeds 70, tighten the added prose rather than raising the gate.
 
-- [ ] **Step 3: Add the PR handoff sentence to `jj-publish`**
+- [x] **Step 3: Add the PR handoff sentence to `jj-publish`**
 
 In `skills/jj-publish/SKILL.md`, replace the closing paragraph:
 
@@ -1528,17 +1528,17 @@ interface. Use `jj-docs` for installed-version command syntax or an
 unfamiliar push safety failure.
 ```
 
-- [ ] **Step 4: Verify the line limit**
+- [x] **Step 4: Verify the line limit**
 
 Run: `wc -l skills/jj-publish/SKILL.md`
 Expected: at most 70.
 
-- [ ] **Step 5: Run the harness**
+- [x] **Step 5: Run the harness**
 
 Run: `npm test`
 Expected: exit 0.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 jj status
@@ -1564,7 +1564,7 @@ Existing eval files reference `/private/tmp/black-belt-sdd.bTrl5q/...` fixtures 
 
 **Design note:** these evals are **manual, human-run** behavior transcripts. Do not attempt to automate them in `npm test`; the harness deliberately covers only deterministic structural and surface checks.
 
-- [ ] **Step 1: Write the eval README**
+- [x] **Step 1: Write the eval README**
 
 Create `evals/README.md`:
 
@@ -1604,7 +1604,7 @@ deliberately does not attempt to score agent behavior.
 | `maintaining-jj-catalog.md` | Release maintenance workflow |
 ```
 
-- [ ] **Step 2: Write the routing eval**
+- [x] **Step 2: Write the routing eval**
 
 Create `evals/skill-routing.md`:
 
@@ -1664,7 +1664,7 @@ If two or more scenarios fail, add a compact routing table to
 the rule unchanged and record that `description` frontmatter is sufficient.
 ```
 
-- [ ] **Step 3: Mark the stale fixture reference in `core-rule.md`**
+- [x] **Step 3: Mark the stale fixture reference in `core-rule.md`**
 
 In `evals/core-rule.md`, replace lines 3–4:
 
@@ -1682,12 +1682,12 @@ fixtures and full transcripts were at
 exist.
 ```
 
-- [ ] **Step 4: Run the harness**
+- [x] **Step 4: Run the harness**
 
 Run: `npm test`
 Expected: exit 0. The link gate confirms `evals/core-rule.md -> README.md` resolves. The command probe reads `evals/` too, so any `jj` invocation quoted in the new files must be real — the routing eval quotes user prompts, not commands, so nothing new is probed.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 jj status
@@ -1700,22 +1700,22 @@ jj new
 
 ## Final verification
 
-- [ ] **Run the complete harness**
+- [x] **Run the complete harness**
 
 Run: `npm test`
 Expected: exit 0, all tests passing.
 
-- [ ] **Confirm the public skill count**
+- [x] **Confirm the public skill count**
 
 Run: `ls -d skills/*/ | wc -l`
 Expected: `10`
 
-- [ ] **Confirm no Git was used**
+- [x] **Confirm no Git was used**
 
 Run: `jj log -r 'main..@' --no-graph -T 'description.first_line() ++ "\n"'`
 Expected: eleven commit descriptions, one per task, in order.
 
-- [ ] **Confirm the working copy is clean**
+- [x] **Confirm the working copy is clean**
 
 Run: `jj status`
 Expected: no changes, or only an empty working-copy change.

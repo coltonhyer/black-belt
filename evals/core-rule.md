@@ -1,7 +1,9 @@
 # Core Jujutsu rule evaluation
 
-The disposable fixtures and full agent transcripts are in
-`/private/tmp/black-belt-sdd.bTrl5q/task-1-evals/traces.md`.
+Historical record; see [the evaluation README](README.md). The disposable
+fixtures and full transcripts were at
+`/private/tmp/black-belt-sdd.bTrl5q/task-1-evals/traces.md` and no longer
+exist.
 
 ## RED — no rule
 
