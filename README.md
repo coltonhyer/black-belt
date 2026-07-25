@@ -1,7 +1,8 @@
 # Black Belt
 
 Black Belt is a Jujutsu-first skill catalog for coding agents. It supports
-Jujutsu 0.43, 0.42, and 0.41.
+Jujutsu 0.43, 0.42, and 0.41, declared in
+[`jj-support.json`](jj-support.json) and enforced by `npm test`.
 
 ## Prerequisites
 
@@ -74,6 +75,17 @@ maintenance skill, not part of the distributed plugin.
 
 Black Belt bundles skills and compact core-rule hooks for Codex, Claude Code,
 and Antigravity. It does not bundle an MCP server or app.
+
+## Testing
+
+```sh
+npm test
+```
+
+The harness needs Node.js and a `jj` binary inside the supported window. It
+lints skill frontmatter, resolves every relative link, checks that the core
+rule and host manifests have not drifted, and probes every documented `jj`
+subcommand and flag against the installed binary.
 
 ## License
 

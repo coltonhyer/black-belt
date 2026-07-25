@@ -643,7 +643,7 @@ Make the supported window machine-readable, and probe every `jj` command the cat
 
 **Design note for the implementer:** the probe never runs a documented command for real — that could mutate the repository. It verifies (a) the subcommand path exists via `jj <sub...> --help`, and (b) each flag literal appears in that help text. This is non-mutating and deterministic.
 
-- [ ] **Step 1: Create `jj-support.json`**
+- [x] **Step 1: Create `jj-support.json`**
 
 ```json
 {
@@ -651,7 +651,7 @@ Make the supported window machine-readable, and probe every `jj` command the cat
 }
 ```
 
-- [ ] **Step 2: Write the failing test**
+- [x] **Step 2: Write the failing test**
 
 Write `tests/jj-surface.test.mjs`:
 
@@ -775,7 +775,7 @@ test("every documented jj flag exists on its subcommand", () => {
 });
 ```
 
-- [ ] **Step 3: Run and verify**
+- [x] **Step 3: Run and verify**
 
 Run: `npm test`
 
@@ -795,7 +795,7 @@ If it does report a failure, the cause is one of three things, in order of likel
 
 Do not broaden the regex to make a failure disappear without deciding which of the three it is.
 
-- [ ] **Step 4: Prove the probe catches drift**
+- [x] **Step 4: Prove the probe catches drift**
 
 ```bash
 printf '\n```sh\njj rebase -r @ --destination-of-yore x\n```\n' >> skills/jj-stack-editing/SKILL.md
@@ -806,7 +806,7 @@ npm test
 
 Expected: first run exits 1 naming `jj rebase --destination-of-yore`; after restore, exit 0.
 
-- [ ] **Step 5: Source the README version window from `jj-support.json`**
+- [x] **Step 5: Source the README version window from `jj-support.json`**
 
 Edit `README.md` lines 3–9 so the window is stated once as prose that the gate checks, and add a pointer to the source of truth. Replace:
 
@@ -823,7 +823,7 @@ Jujutsu 0.43, 0.42, and 0.41, declared in
 [`jj-support.json`](jj-support.json) and enforced by `npm test`.
 ```
 
-- [ ] **Step 6: Add a Testing section to the README**
+- [x] **Step 6: Add a Testing section to the README**
 
 Insert immediately before the `## License` heading:
 
@@ -840,12 +840,12 @@ rule and host manifests have not drifted, and probes every documented `jj`
 subcommand and flag against the installed binary.
 ```
 
-- [ ] **Step 7: Run the full harness**
+- [x] **Step 7: Run the full harness**
 
 Run: `npm test`
 Expected: exit 0.
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 jj status
