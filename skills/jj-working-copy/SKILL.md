@@ -37,6 +37,12 @@ Order matters: `jj file untrack` refuses a path that is not already ignored.
 Track a path that ignore rules currently exclude with
 `jj file track <fileset>`.
 
+`jj restore <paths>` is the opposite operation, and it is destructive: it
+replaces those paths with another revision's content, discarding uncommitted
+edits without a prompt or confirmation. Confirm the paths hold nothing worth
+keeping before running it. If one did, the content is still in the operation
+log — route to `jj-recovery` rather than retyping the file.
+
 ## A snapshot fails on file size
 
 `snapshot.max-new-file-size` defaults to `1MiB`, and a larger new file makes

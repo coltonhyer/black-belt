@@ -8,6 +8,10 @@ description: Use when a Jujutsu operation produced the wrong result, work appear
 Stop making unrelated mutations. Treat operation history as the recovery
 surface, not a reason to reconstruct files manually.
 
+Uncommitted work is recoverable too. Every command snapshots the working copy
+before acting, so content discarded by `jj restore` or an abandoned change is
+in the operation log. Do not assume a Git-style unrecoverable loss.
+
 1. Inspect `jj op log` for repository-wide operations, and `jj evolog -r
    <change>` for one change's own rewrite history, before changing anything.
    Inspect the candidate operation and the affected graph first.
