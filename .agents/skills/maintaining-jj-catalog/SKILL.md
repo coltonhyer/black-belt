@@ -25,7 +25,7 @@ Keep router entries to one line and shard a category index before it reaches
 roughly 100 entries.
 
 Before checkpointing, run structural, behavioral, three-version, link,
-host-discovery, and manifest-sync gates. The shared metadata fields must agree
-across all host manifests; run `scripts/check-manifest-sync.sh` to enforce it.
-Inspect `jj status` and the targeted `jj diff`, then `jj describe` and `jj new`
-only after the gates pass.
+host-discovery, and manifest-sync gates. Run `npm test` for the structural,
+link, sync, and installed-surface gates; `scripts/check-manifest-sync.sh`
+remains the standalone manifest check. Inspect `jj status` and the targeted
+`jj diff`, then `jj describe` and `jj new` only after the gates pass.

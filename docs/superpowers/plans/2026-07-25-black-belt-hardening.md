@@ -441,7 +441,7 @@ The core rule exists verbatim in two places because Codex requires a literal `AG
 - Consumes: `readRoot()`, `ROOT` from `tests/helpers.mjs`.
 - Produces: nothing consumed by later tasks. `.agents/skills/maintaining-jj-catalog/scripts/check-manifest-sync.sh` is **kept**, not deleted — the release workflow still calls it directly. The Node test duplicates its assertions so `npm test` is self-contained.
 
-- [ ] **Step 1: Confirm the current relationship between the two files**
+- [x] **Step 1: Confirm the current relationship between the two files**
 
 Run: `diff rules/jujutsu-agent.md AGENTS.md`
 
@@ -456,7 +456,7 @@ Expected (verified against the current tree): exit 1 with exactly this output �
 
 `AGENTS.md` is the rule file verbatim plus one trailing paragraph. That is why the test below asserts **containment**, not equality. If the diff shows anything else, the files have already drifted — reconcile them before writing the gate.
 
-- [ ] **Step 2: Write the test**
+- [x] **Step 2: Write the test**
 
 Write `tests/sync.test.mjs`:
 
@@ -553,13 +553,13 @@ test("every manifest path reference points at a real file", () => {
 });
 ```
 
-- [ ] **Step 3: Run the tests**
+- [x] **Step 3: Run the tests**
 
 Run: `npm test`
 
 Expected: exit 0 — all six cases pass. `.claude-plugin/plugin.json`, `.codex-plugin/plugin.json`, and the `package.json` written in Task 1 are all at `0.1.0`, so the version case is already satisfied. If any case fails, its message names the disagreeing values; align them to `0.1.0` and re-run rather than loosening the assertion.
 
-- [ ] **Step 4: Add a version field to the Antigravity manifest**
+- [x] **Step 4: Add a version field to the Antigravity manifest**
 
 The root `plugin.json` has no `version`. Add one so all three plugin manifests agree, and extend the test. Edit `plugin.json` to:
 
@@ -583,12 +583,12 @@ Then change the version test's `rels` array in `tests/sync.test.mjs` to include 
   ];
 ```
 
-- [ ] **Step 5: Run and verify**
+- [x] **Step 5: Run and verify**
 
 Run: `npm test`
 Expected: exit 0.
 
-- [ ] **Step 6: Prove the sync gate catches drift**
+- [x] **Step 6: Prove the sync gate catches drift**
 
 ```bash
 node -e 'const f=".codex-plugin/plugin.json";const j=require("fs");const o=JSON.parse(j.readFileSync(f));o.version="9.9.9";j.writeFileSync(f,JSON.stringify(o,null,2)+"\n")'
@@ -599,7 +599,7 @@ npm test
 
 Expected: first `npm test` exits 1 with `versions disagree: 0.1.0 | 9.9.9`; after `jj restore`, exit 0.
 
-- [ ] **Step 7: Point the maintenance skill's gates at `npm test`**
+- [x] **Step 7: Point the maintenance skill's gates at `npm test`**
 
 In `.agents/skills/maintaining-jj-catalog/SKILL.md`, replace this sentence:
 
@@ -617,7 +617,7 @@ Run `npm test` for the structural, link, sync, and installed-surface gates;
 
 Confirm the file still passes the 70-line ceiling from Task 2.
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 jj status

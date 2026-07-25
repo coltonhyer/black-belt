@@ -1,5 +1,6 @@
 {
   "$schema": "https://antigravity.google/schemas/v1/plugin.json",
   "name": "black-belt",
+  "version": "0.1.0",
   "description": "Jujutsu-first workflows for coding agents."
 }
