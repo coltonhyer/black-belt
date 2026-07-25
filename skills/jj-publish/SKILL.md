@@ -52,5 +52,7 @@ host's own interface.
    jj log -r 'feature/one | feature/one@origin | @-'
    ```
 
-Keep host-specific pull-request creation out of this workflow. Use `jj-docs`
-for installed-version command syntax or an unfamiliar push safety failure.
+Keep host-specific pull-request creation out of this workflow; the pushed
+bookmark name is the head branch to hand to the host's own CLI or web
+interface. Use `jj-docs` for installed-version command syntax or an
+unfamiliar push safety failure.

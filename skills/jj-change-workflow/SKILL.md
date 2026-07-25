@@ -23,6 +23,14 @@ change as it is rewritten. `@-` is its parent.
 
 Do not add a bookmark for local completion alone.
 
+## Merge changes
+
+A change can have several parents. `jj new <a> <b>` creates a merge with both
+as parents; there is no separate merge command and no merge-in-progress state
+to finish. Inspect every parent before creating one, and verify the resulting
+parent set afterward with `jj log -r '@ | parents(@)'`. Conflicts that result
+are ordinary first-class conflicts — route them to `jj-conflicts`.
+
 ## Scope
 
 This is for one ordinary local change. Route stack edits, conflicts, recovery,
