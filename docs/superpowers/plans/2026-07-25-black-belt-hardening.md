@@ -339,7 +339,7 @@ Every relative Markdown link in the catalog must resolve to a real file. This is
 - Consumes: `markdownFiles()`, `ROOT` from `tests/helpers.mjs`.
 - Produces: nothing consumed by later tasks.
 
-- [ ] **Step 1: Write the test**
+- [x] **Step 1: Write the test**
 
 Write `tests/links.test.mjs`:
 
@@ -398,12 +398,12 @@ test("skills reference other skills by name, not by relative path", () => {
 });
 ```
 
-- [ ] **Step 2: Run and verify it passes**
+- [x] **Step 2: Run and verify it passes**
 
 Run: `npm test`
 Expected: exit 0. The existing `jj-docs` links (`references/recipes.md` and `references/recipes/check-feature-maturity.md`) resolve, and no `SKILL.md` uses `../`.
 
-- [ ] **Step 3: Prove the gate catches a broken link**
+- [x] **Step 3: Prove the gate catches a broken link**
 
 ```bash
 printf '\n[dangling](references/does-not-exist.md)\n' >> skills/jj-docs/SKILL.md
@@ -413,12 +413,12 @@ jj restore skills/jj-docs/SKILL.md
 
 Expected: `exit=1` naming `skills/jj-docs/SKILL.md -> references/does-not-exist.md`. `jj restore` returns the file to its committed content — confirm with `jj status` showing no change to that path.
 
-- [ ] **Step 4: Re-run clean**
+- [x] **Step 4: Re-run clean**
 
 Run: `npm test`
 Expected: exit 0.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 jj status
