@@ -36,8 +36,15 @@ jj --at-op=<operation> log -r 'ancestors(@, 10)'
 jj --at-op=<operation> status
 ```
 
-`--at-op` is read-only. It is the safest way to confirm a candidate holds the
-work you are missing.
+**`--at-op` is not itself read-only** — it sets the operation a command runs
+against, and Jujutsu permits mutating commands there. Doing so writes from a
+stale view and forks the operation log, which Jujutsu then reports as
+`Concurrent modification detected` and reconciles into divergent operations.
+That turns an inspection into a second problem to recover from.
+
+Pair `--at-op` only with read-only commands such as the `log` and `status`
+above. To change history, return to the current operation and use one of the
+reversal commands.
 
 ## Trace one change rather than the whole repo
 

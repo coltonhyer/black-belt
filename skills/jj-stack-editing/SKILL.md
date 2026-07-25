@@ -22,12 +22,14 @@ revisions. Select the intended changes by change ID, never by description.
 
 ## Non-interactive editing
 
-Prefer non-interactive forms so no command blocks on an editor. Split by naming
-paths (`jj split <fileset>`) rather than the interactive selection, and move
-changes with `jj squash --into <revision>` or `jj absorb` rather than `jj
-squash -i` or `jj diffedit`. When only an interactive tool can express the edit,
-first confirm a non-interactive diff editor is configured; do not launch a
-blocking editor.
+Prefer non-interactive forms so no command blocks on an editor. Two editors are
+in play: a fileset avoids the diff editor, and a message flag avoids the
+description editor. Split by naming paths with a description
+(`jj split <fileset> -m '<description>'`), and move changes with `jj squash
+--into <revision>` or `jj absorb` rather than `jj squash -i` or `jj diffedit`;
+add `--use-destination-message` or `-m` when both squash ends are described.
+When only an interactive tool can express the edit, first confirm a
+non-interactive diff editor is configured; do not launch a blocking editor.
 
 ## Immutable revisions
 

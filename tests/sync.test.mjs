@@ -57,9 +57,19 @@ test("description agrees across every manifest that declares one", () => {
   assert.equal(values.size, 1, `descriptions disagree: ${[...values].join(" | ")}`);
 });
 
+// `plugin.json` (Antigravity) is deliberately excluded: its schema allows only
+// `name` and `description`, so adding `version` there makes the manifest
+// invalid. Assert its absence rather than its agreement.
+test("the Antigravity manifest declares no version", () => {
+  assert.equal(
+    load("plugin.json").version,
+    undefined,
+    "plugin.json must not declare a version; the Antigravity schema forbids it",
+  );
+});
+
 test("version agrees across every manifest that declares one", () => {
   const rels = [
-    "plugin.json",
     ".claude-plugin/plugin.json",
     ".codex-plugin/plugin.json",
     "package.json",

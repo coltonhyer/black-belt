@@ -25,11 +25,39 @@ test("installed jj is inside the supported window", () => {
   );
 });
 
+// Every consumer of the window must name exactly the supported set — no
+// missing entries and no stale extras. Inclusion checks let a dropped version
+// linger in prose long after it left the window.
+const WINDOW_RE = /\b0\.\d+(?:\.\d+)?\b/g;
+
+function declaredVersions(text) {
+  return new Set([...text.matchAll(WINDOW_RE)].map((m) => m[0].split(".").slice(0, 2).join(".")));
+}
+
+// The README states the window twice — the intro sentence and Prerequisites —
+// so compare every version-shaped token in the file. Any `0.x` string that is
+// not a supported jj version will fail this deliberately; the README is short
+// and the window is the only thing in it shaped that way.
 test("README advertises exactly the supported window", () => {
-  const readme = readRoot("README.md");
-  for (const version of SUPPORTED) {
-    assert.ok(readme.includes(version), `README.md does not mention supported version ${version}`);
-  }
+  assert.deepEqual(
+    [...declaredVersions(readRoot("README.md"))].sort(),
+    [...SUPPORTED].sort(),
+    "README.md version mentions do not match jj-support.json exactly",
+  );
+});
+
+// Guards the drift vector created by the matrix pinning patch versions
+// (`0.41.0`) while jj-support.json declares minors (`0.41`).
+test("the CI matrix covers exactly the supported window", () => {
+  const workflow = readRoot(".github/workflows/ci.yml");
+  const matrix = /jj:\s*\[([^\]]*)\]/.exec(workflow);
+  assert.ok(matrix, ".github/workflows/ci.yml must declare a `jj:` matrix list");
+
+  assert.deepEqual(
+    [...declaredVersions(matrix[1])].sort(),
+    [...SUPPORTED].sort(),
+    "CI matrix does not match jj-support.json exactly",
+  );
 });
 
 // --- command extraction -------------------------------------------------
