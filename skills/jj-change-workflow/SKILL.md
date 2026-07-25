@@ -26,5 +26,8 @@ Do not add a bookmark for local completion alone.
 ## Scope
 
 This is for one ordinary local change. Route stack edits, conflicts, recovery,
-workspaces, and publishing to their specialized skills. Use `jj-docs` only
-when installed help is needed to resolve version-specific behavior.
+workspaces, and publishing to their specialized skills. Every command
+snapshots the working copy first, so route generated files, ignore rules, and
+tracking to `jj-working-copy` before running a build or test suite. Use
+`jj-docs` only when installed help is needed to resolve version-specific
+behavior.

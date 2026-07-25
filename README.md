@@ -58,6 +58,7 @@ repository.
 | Skill | Use it for |
 |---|---|
 | `jj-change-workflow` | Ordinary local changes |
+| `jj-working-copy` | Snapshotting, ignores, and file tracking |
 | `jj-querying` | Revsets, filesets, and templates |
 | `jj-stack-editing` | Dependent change stacks |
 | `jj-conflicts` | Conflict inspection and resolution |
