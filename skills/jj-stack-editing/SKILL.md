@@ -37,6 +37,7 @@ past. Inspect the alias and the selected revision, then edit the intended
 mutable change instead. Never override immutability merely to make a command
 succeed.
 
-Use `jj-docs` to resolve installed-version syntax and behavior before relying
-on an editing command. Route conflict resolution and recovery to their
-specialized skills.
+For selector choice, splitting, and structural edits, use
+[the recipe index](references/recipes.md). Use `jj-docs` to resolve
+installed-version syntax and behavior before relying on an editing command.
+Route conflict resolution and recovery to their specialized skills.
