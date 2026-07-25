@@ -223,7 +223,7 @@ Assert every skill is well-formed and every public skill is advertised in the RE
 - Consumes: `skillDirs()`, `parseFrontmatter()`, `readRoot()` from `tests/helpers.mjs`.
 - Produces: nothing consumed by later tasks; the gate itself constrains Tasks 7–10.
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 Write `tests/structure.test.mjs`:
 
@@ -294,12 +294,12 @@ test("maintenance skills are not advertised as public skills", () => {
 });
 ```
 
-- [ ] **Step 2: Run the tests to verify they pass against the current tree**
+- [x] **Step 2: Run the tests to verify they pass against the current tree**
 
 Run: `npm test`
 Expected: exit 0. All four new cases pass — the catalog is already conformant, so this gate starts green and exists to catch regressions.
 
-- [ ] **Step 3: Prove the gate actually catches a violation**
+- [x] **Step 3: Prove the gate actually catches a violation**
 
 Run this scratch check, which must exit 1:
 
@@ -312,12 +312,12 @@ rm -rf skills/jj-scratch-probe
 
 Expected: `exit=1`, with failure text naming `jj-scratch-probe` for both the `name` mismatch, the missing `description`, and the README omission. Confirm `skills/jj-scratch-probe` is deleted and `jj status` is clean of it afterward.
 
-- [ ] **Step 4: Re-run the harness clean**
+- [x] **Step 4: Re-run the harness clean**
 
 Run: `npm test`
 Expected: exit 0.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 jj status
