@@ -26,5 +26,6 @@ stop and re-inspect operation history when the result is not the intended state.
 If recovery would rewrite an immutable revision, stop: that is a configured
 guardrail, not an obstacle to force past.
 
-Use `jj-docs` to resolve installed syntax for inspecting an operation or
-restoring it.
+To identify an operation and pick the narrowest reversal, use
+[the recipe index](references/recipes.md). Use `jj-docs` to resolve installed
+syntax for inspecting an operation or restoring it.
