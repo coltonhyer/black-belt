@@ -865,7 +865,7 @@ jj new
 - Consumes: `npm test` from Task 1, `jj-support.json` from Task 5.
 - Produces: nothing consumed by later tasks.
 
-- [ ] **Step 1: Write the workflow**
+- [x] **Step 1: Write the workflow**
 
 Create `.github/workflows/ci.yml`. The matrix is written out literally rather than read from `jj-support.json`, because GitHub Actions cannot read a file to build a matrix without an extra job; keep it in sync manually and let the version-window test catch mismatches.
 
@@ -909,12 +909,12 @@ jobs:
         run: npm test
 ```
 
-- [ ] **Step 2: Verify the workflow file parses**
+- [x] **Step 2: Verify the workflow file parses**
 
 Run: `node -e "const t=require('fs').readFileSync('.github/workflows/ci.yml','utf8'); if(!/jobs:/.test(t)) throw new Error('missing jobs'); console.log('ok')"`
 Expected: `ok`
 
-- [ ] **Step 3: Verify the matrix matches the declared window**
+- [x] **Step 3: Verify the matrix matches the declared window**
 
 Run:
 
@@ -932,12 +932,12 @@ console.log("matrix ok");
 
 Expected: `matrix ok`
 
-- [ ] **Step 4: Run the harness locally one more time**
+- [x] **Step 4: Run the harness locally one more time**
 
 Run: `npm test`
 Expected: exit 0.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 jj status
