@@ -25,6 +25,17 @@ change as it is rewritten. `@-` is its parent.
 
 Do not add a bookmark for local completion alone.
 
+## Describe versus commit
+
+`jj describe` names `@` and keeps it active. `jj commit` combines describe
+with `jj new`, finalizing `@` and starting a fresh working-copy change, so it
+suits a change that is already finished. When `@` has grown past one coherent
+change, peel commits off with `jj commit <fileset> -m 'concise changeset
+description'`: the named paths are finalized with that description and the
+remaining edits stay in the new `@`. Repeat until `@` holds one coherent
+change. Splitting a change already in history is stack editing, not this
+loop.
+
 ## Scope
 
 This is for one ordinary local change. Route stack edits, conflicts, recovery,
