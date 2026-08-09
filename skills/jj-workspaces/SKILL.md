@@ -20,6 +20,12 @@ change. Do not use Git worktrees for a Jujutsu workspace.
    and `jj log -r '@ | @-'` in both directories. Confirm the two `@` change
    IDs differ and their parent commit IDs match when they should share a base.
 
+A sibling workspace is also how to build or test another revision:
+`jj workspace add --name test -r <revision> ../test`. Do not move the primary
+`@` onto that revision instead — doing so re-snapshots the working directory
+into it, auto-tracking on-disk paths its ignore rules do not cover and
+removing them from disk on the next move.
+
 ## Sparse working copy
 
 A workspace can narrow which paths of its working-copy change are materialized.

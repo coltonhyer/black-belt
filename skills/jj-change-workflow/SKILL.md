@@ -9,17 +9,34 @@ The working copy is a change: `@` names the change being edited, not an
 untracked staging area. Its change ID remains stable while its commit ID can
 change as it is rewritten. `@-` is its parent.
 
+Every command re-snapshots `@` from the working directory, so its content is
+whatever is on disk — including files written by other tools or agents. Ignore
+rules are versioned: a path ignored by one revision's `.gitignore` is
+auto-tracked under any revision whose rules do not cover it, older or newer.
+Keep agent scratch paths in an unversioned ignore source instead —
+`.git/info/exclude` when colocated, `.jj/repo/store/git/info/exclude` when not
+— set before those files appear, because ignoring a path never untracks it.
+
 ## Single-change loop
 
 1. Follow the repository's Jujutsu preflight, then inspect `jj status` and
    `jj log -r '@ | @-'` before selecting the intended change.
-2. Edit only the requested paths. Inspect `jj diff` before describing it.
-3. Use `jj describe -m 'concise changeset description'` for the current `@`.
+2. Before the first edit, confirm `@` is yours to write into. If `jj status`
+   shows `@` already carries a description, a bookmark, or a remote-tracking
+   name, it is a finished or published change: run `jj new` before touching
+   any file. There is no unstaged state to review first — the next command
+   snapshots your edit straight into `@` and silently amends it.
+3. Edit only the requested paths. Inspect `jj diff` before describing it.
+4. Use `jj describe -m 'concise changeset description'` for the current `@`.
    Pass subsequent `-m` flags for additional paragraphs when the change needs
    body text.
-4. If the user says the change is finished, use `jj new` to begin a fresh
-   empty working-copy change. Otherwise keep the described `@` active.
-5. Verify with `jj status`, `jj log -r '@ | @-'`, and a targeted diff. After
+5. When the change is complete, start a fresh working-copy change with `jj
+   new`, or use `jj commit -m 'concise changeset description'` in place of
+   step 4 to describe and advance in one step. Treat handoff, pausing,
+   reporting the change done, and publishing as complete. Never leave `@`
+   parked on a change you consider finished: the next snapshot amends it
+   silently.
+6. Verify with `jj status`, `jj log -r '@ | @-'`, and a targeted diff. After
    `jj new`, inspect `@-` to verify the completed change and `@` to verify it
    is empty.
 

@@ -6,7 +6,9 @@ description: Use when splitting, squashing, rebasing, reordering, inserting, dup
 # Dependent Jujutsu changes
 
 A change ID identifies the logical change; commit IDs identify rewritten
-revisions. Select the intended changes by change ID, never by description.
+revisions. Select the intended changes by change ID, never by description. A
+split is the exception: it reassigns the original ID to one half, so re-verify
+an ID you held across one.
 
 ## Inspect, mutate, verify
 
@@ -25,9 +27,36 @@ revisions. Select the intended changes by change ID, never by description.
 Prefer non-interactive forms so no command blocks on an editor. Split by naming
 paths (`jj split <fileset>`) rather than the interactive selection, and move
 changes with `jj squash --into <revision>` or `jj absorb` rather than `jj
-squash -i` or `jj diffedit`. When only an interactive tool can express the edit,
-first confirm a non-interactive diff editor is configured; do not launch a
-blocking editor.
+squash -i` or `jj diffedit`. Selecting content non-interactively does not make
+a command non-interactive: `jj squash` still opens an editor to merge
+descriptions when both revisions have one, and `-u` keeps the destination's.
+Read `--help` for a command's non-interactive flag before running it rather
+than assuming the recommended form has none. When only an interactive tool can
+express the edit, first confirm a non-interactive diff editor is configured; do
+not launch a blocking editor.
+
+## Splitting redistributes identity
+
+`jj split` gives one half a new change ID, and which half keeps the original
+depends on the form. The default and `--parallel` keep it on the selected
+changes; `-o`, `-A`, and `-B` keep it on the remainder. Installed help
+documents which half `-m` describes; it does not document change-ID
+assignment, so do not infer one from the other. Read the `Selected changes`
+and `Remaining changes` lines the command
+prints, confirm with `jj diff -s -r <change>`, then describe. Selecting by
+change ID does not survive a split unverified: the ID you held may now name
+the other content.
+
+## Validating another revision
+
+Do not build, test, or inspect a historical revision by moving `@` to it with
+`jj new <revision>` or `jj edit <revision>`. `@` is re-snapshotted from disk on
+every command, so an on-disk path the destination's ignore rules do not cover
+is auto-tracked into the working-copy change, and the next move removes it from
+disk. `jj edit` is the worse of the two: `@` becomes that revision, so the
+contamination amends it and rewrites its descendants rather than landing in a
+throwaway child. Read content with `jj file
+show -r` or `jj diff -r`, and run builds or tests in a separate workspace.
 
 ## Immutable revisions
 

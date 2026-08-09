@@ -52,5 +52,11 @@ host's own interface.
    jj log -r 'feature/one | feature/one@origin | @-'
    ```
 
+Publishing does not freeze the revision: the default immutable set excludes
+bookmarks you track, so a bookmark you pushed stays mutable. Confirm the
+installed definition with `jj help -k revsets` before relying on it. Confirm
+`@` is not the published revision; a parked `@` amends it on the next
+snapshot.
+
 Keep host-specific pull-request creation out of this workflow. Use `jj-docs`
 for installed-version command syntax or an unfamiliar push safety failure.
