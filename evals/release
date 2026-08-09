@@ -27,6 +27,10 @@ node "$root/tests/antigravity-jujutsu-context.test.mjs"
 sh "$root/.agents/skills/maintaining-jj-catalog/scripts/test-capture-jj-surface.sh"
 sh "$root/.agents/skills/maintaining-jj-catalog/scripts/check-manifest-sync.sh"
 
+# One suite id groups every trial of this release invocation.
+EVAL_SUITE="release-$(date -u +%Y%m%dT%H%M%SZ)"
+export EVAL_SUITE
+
 for host in codex claude agy; do
   for jj in "$@"; do
     EVAL_HOST=$host EVAL_JJ=$jj "$run"

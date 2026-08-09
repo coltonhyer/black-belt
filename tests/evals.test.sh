@@ -1,5 +1,6 @@
 #!/bin/sh
 set -eu
+export EVAL_RECORD=0
 
 root=$(CDPATH= cd "$(dirname "$0")/.." && pwd)
 tmp=$(mktemp -d "${TMPDIR:-/tmp}/black-belt-evals.XXXXXX")
@@ -15,6 +16,10 @@ cat > "$tmp/bin/agent" <<'SH'
 #!/bin/sh
 host=${0##*/}
 printf '%s %s\n' "$host" "$*" >> "$FAKE_AGENT_LOG"
+if [ "$1" = --version ]; then
+  printf 'fake-%s 1.0\n' "$host"
+  exit
+fi
 if [ "$1" = plugin ]; then
   printf '{}\n'
   exit
@@ -57,7 +62,11 @@ ln -s agent "$tmp/bin/agy"
 
 cat > "$tmp/eval-jj" <<'SH'
 #!/bin/sh
-test "$1" = marker
+case "$1" in
+  version) echo 'jj 0.0.0-fake'; exit ;;
+  -R) echo 'fakecatalogcommit'; exit ;;
+esac
+test "$1" = marker || exit 2
 touch "$2/jj-$3"
 SH
 chmod +x "$tmp/eval-jj"
@@ -120,3 +129,36 @@ if grep -F 'codex plugin ' "$FAKE_AGENT_LOG" >/dev/null; then
   echo 'bare eval installed the plugin' >&2
   exit 1
 fi
+
+# Recording arm: the verdict row must be valid JSON with full identity, and
+# the evidence directory must be preserved with the command trace, sans creds.
+export FAKE_AGENT_LOG="$tmp/record.log"
+output=$(HOME="$tmp/source-home" CODEX_HOME="$tmp/source-home/.codex" \
+  EVAL_HOST=codex EVAL_RECORD=1 EVAL_RESULTS="$tmp/results.jsonl" \
+  EVAL_RUNS_DIR="$tmp/runs" EVAL_SUITE=suite-under-test \
+  R_HARMLESS_SENTINEL=must-not-appear \
+  EVAL_JJ="$tmp/eval-jj" PATH="$tmp/bin:$PATH" \
+  "$root/evals/run" "$tmp/case.sh")
+work=${output##* }
+python3 - "$tmp/results.jsonl" <<'PY'
+import json, sys
+raw = open(sys.argv[1]).read()
+assert "must-not-appear" not in raw and "harmless_sentinel" not in raw
+rows = [json.loads(line) for line in raw.splitlines()]
+assert len(rows) == 1, rows
+r = rows[0]
+keys = ("ts", "catalog", "host", "host_version", "model",
+        "arm", "case", "result", "jj", "trial", "suite")
+assert set(r) == set(keys), sorted(r)
+for key in ("ts", "catalog", "host", "host_version", "arm",
+            "case", "result", "jj", "trial", "suite"):
+    assert r.get(key), key
+assert r["host"] == "codex" and r["arm"] == "plugin"
+assert r["case"] == "case" and r["result"] == "PASS"
+assert r["host_version"].startswith("fake-codex")
+assert r["suite"] == "suite-under-test"
+PY
+case "$work" in "$tmp/runs/"*) ;; *) echo "evidence not archived: $work" >&2; exit 1 ;; esac
+test -s "$work/commands.jsonl"
+test -d "$work/repo"
+test ! -e "$work/home"
