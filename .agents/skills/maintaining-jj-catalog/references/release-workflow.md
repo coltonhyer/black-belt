@@ -91,28 +91,24 @@ category indexes before a router grows to about 100 entries.
 
 ## 5. Run evidence gates
 
-Run the applicable structural validator (for example, the cached PyYAML
-validator when available), then a scratch behavior check for every changed
-recipe on `N`, `N-1`, and `N-2`. Check direct upstream links, and run host
-discovery/read-only invocation checks for the repository-only skill without
-asserting progressive disclosure where a host trace cannot prove it. Record
-facts, versions, command exits, and limitations concisely in the matching
-evaluation.
-
-Run the host-manifest sync gate so shared metadata does not drift when the
-version bumps:
+Run the applicable structural validator, direct-link checks, and one
+disposable success/fallback check for each changed recipe. Then run the release
+matrix with the three pinned binaries:
 
 ```sh
-.agents/skills/maintaining-jj-catalog/scripts/check-manifest-sync.sh
+evals/release /path/to/jj-N /path/to/jj-N-1 /path/to/jj-N-2
 ```
 
-It compares the fields that must agree across every host manifest — top-level
-`name`, `description`, `version`, and the author/owner display name — and
-confirms the hooks file the Claude manifest references exists. Host-specific
-fields are intentionally not compared: `plugin.json` (Antigravity) carries no
-`version`, and each host keeps its own `interface`/`keywords` block. When a
-release bumps the version, update `.claude-plugin/plugin.json` and
-`.codex-plugin/plugin.json` together and re-run the gate.
+This is the only three-host, three-version matrix. It installs the plugin from
+the local source for Codex, Claude Code, and Antigravity, runs all eleven
+behavior cases against each Jujutsu binary, and runs the runner, oracle, hook,
+surface-capture, and manifest-sync checks. It then records one non-gating bare
+run per host against `N`. Between releases, use `evals/run` with the current
+Jujutsu instead.
+
+The manifest check compares top-level `name`, `description`, `version`, and
+the author/owner display name. When a release bumps the version, update
+`.claude-plugin/plugin.json` and `.codex-plugin/plugin.json` together.
 
 Before and after a checkpoint, inspect only the intended release change:
 

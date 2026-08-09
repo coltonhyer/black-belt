@@ -1,0 +1,41 @@
+#!/bin/sh
+# Release-only 3-host x 3-Jujutsu-version gate.
+set -eu
+
+root=$(CDPATH= cd "$(dirname "$0")/.." && pwd)
+run=${EVAL_RUN:-$root/evals/run}
+
+if [ "$#" -ne 3 ]; then
+  echo "usage: evals/release /path/to/jj-N /path/to/jj-N-1 /path/to/jj-N-2" >&2
+  exit 2
+fi
+
+versions=
+for jj in "$@"; do
+  test -x "$jj" || { echo "not executable: $jj" >&2; exit 2; }
+  version=$("$jj" version | awk '$1 == "jj" && $2 ~ /^[0-9]+\.[0-9]+(\.|$)/ { split($2, v, "."); print v[1] "." v[2] }')
+  test -n "$version" || { echo "invalid Jujutsu binary: $jj" >&2; exit 2; }
+  case " $versions " in
+    *" $version "*) echo "duplicate Jujutsu version: $version" >&2; exit 2 ;;
+  esac
+  versions="$versions $version"
+done
+
+sh "$root/tests/evals.test.sh"
+sh "$root/tests/eval-cases.test.sh"
+node "$root/tests/antigravity-jujutsu-context.test.mjs"
+sh "$root/.agents/skills/maintaining-jj-catalog/scripts/test-capture-jj-surface.sh"
+sh "$root/.agents/skills/maintaining-jj-catalog/scripts/check-manifest-sync.sh"
+
+for host in codex claude agy; do
+  for jj in "$@"; do
+    EVAL_HOST=$host EVAL_JJ=$jj "$run"
+  done
+done
+
+# Whole-plugin ablation on N: an attribution and drift signal, never a gate.
+# A bare PASS justifies targeted ablation before deleting catalog prose.
+echo "--- baseline (bare on N, informational) ---"
+for host in codex claude agy; do
+  EVAL_HOST=$host EVAL_PLUGIN=off EVAL_JJ=$1 "$run" || true
+done

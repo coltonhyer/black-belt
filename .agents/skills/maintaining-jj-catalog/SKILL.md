@@ -24,8 +24,7 @@ but compatibility recognition remains while any supported version needs it.
 Keep router entries to one line and shard a category index before it reaches
 roughly 100 entries.
 
-Before checkpointing, run structural, behavioral, three-version, link,
-host-discovery, and manifest-sync gates. The shared metadata fields must agree
-across all host manifests; run `scripts/check-manifest-sync.sh` to enforce it.
-Inspect `jj status` and the targeted `jj diff`, then `jj describe` and `jj new`
-only after the gates pass.
+Between releases, run `evals/run` with the current Jujutsu. At a release, run
+`evals/release` with the pinned `N`, `N-1`, and `N-2` binaries; it is the only
+three-host, three-version matrix. Inspect `jj status` and the targeted `jj
+diff`, then `jj describe` and `jj new` only after the gates pass.

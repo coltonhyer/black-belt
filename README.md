@@ -70,6 +70,22 @@ Each invoked skill starts compact and links to `references/` only when a
 specific recipe needs more context. `maintaining-jj-catalog` is a repository
 maintenance skill, not part of the distributed plugin.
 
+## Evals
+
+Routine checks install the local plugin into a disposable Codex home and use
+the current `jj`; the latest outcomes are in [the results table](evals/RESULTS.md):
+
+```sh
+evals/run
+```
+
+Only for releases, run every case on all three hosts and the three supported
+Jujutsu versions:
+
+```sh
+evals/release /path/to/jj-N /path/to/jj-N-1 /path/to/jj-N-2
+```
+
 ## Scope
 
 Black Belt bundles skills and compact core-rule hooks for Codex, Claude Code,

@@ -1,0 +1,156 @@
+#!/usr/bin/env bash
+# Run plugin eval cases. Usage: evals/run [case.sh ...]
+set -uo pipefail
+
+CATALOG=$(cd "$(dirname "$0")/.." && pwd -P)
+HOST=${EVAL_HOST:-codex}
+SOURCE_CODEX_HOME=${CODEX_HOME:-$HOME/.codex}
+SOURCE_CLAUDE_HOME=${CLAUDE_CONFIG_DIR:-$HOME/.claude}
+SOURCE_AGY_HOME=$HOME/.gemini/antigravity-cli
+JJ_BIN=$(realpath "${EVAL_JJ:-$(command -v jj)}")
+
+run_case() (
+  set -e
+  CASE_FILE=$(realpath "$1")
+  WORK=$(mktemp -d "${TMPDIR:-/tmp}/black-belt-eval.XXXXXX")
+  REPO="$WORK/repo"
+  AGENT_HOME="$WORK/home"
+  CODEX_HOME="$AGENT_HOME/.codex"
+  CLAUDE_CONFIG_DIR="$AGENT_HOME/.claude"
+  LAST="$WORK/last.txt"
+  COMMANDS="$WORK/commands.jsonl"
+
+  cleanup() {
+    find "$WORK" -mindepth 1 -maxdepth 1 ! -name repo ! -name commands.jsonl \
+      -exec rm -rf -- {} +
+  }
+  trap cleanup EXIT
+  trap 'exit 129' HUP
+  trap 'exit 130' INT
+  trap 'exit 143' TERM
+
+  install -d -m 700 "$REPO" "$AGENT_HOME" "$WORK/bin"
+  ln -s "$JJ_BIN" "$WORK/bin/jj"
+  printf 'export PATH=%q:$PATH\n' "$WORK/bin" > "$AGENT_HOME/.bash_profile"
+
+  case "$HOST" in
+    codex)
+      install -d -m 700 "$CODEX_HOME"
+      install -m 600 "$SOURCE_CODEX_HOME/auth.json" "$CODEX_HOME/auth.json"
+      ;;
+    claude)
+      install -d -m 700 "$CLAUDE_CONFIG_DIR"
+      install -m 600 "$SOURCE_CLAUDE_HOME/.credentials.json" \
+        "$CLAUDE_CONFIG_DIR/.credentials.json"
+      ;;
+    agy)
+      install -d -m 700 "$AGENT_HOME/.gemini/antigravity-cli"
+      install -m 600 "$SOURCE_AGY_HOME/antigravity-oauth-token" \
+        "$AGENT_HOME/.gemini/antigravity-cli/antigravity-oauth-token"
+      ;;
+    *)
+      echo "unknown eval host: $HOST" >&2
+      exit 2
+      ;;
+  esac
+
+  export JJ_CONFIG=/dev/null JJ_USER="Eval Agent" JJ_EMAIL="eval@example.com"
+  export PATH="$WORK/bin:$PATH"
+
+  # shellcheck source=/dev/null
+  source "$CASE_FILE"
+  setup "$REPO"
+  capture "$REPO"
+
+  arm=plugin
+  if [ "${EVAL_PLUGIN:-on}" = off ]; then
+    arm=bare
+  else
+    case "$HOST" in
+      codex)
+        HOME="$AGENT_HOME" CODEX_HOME="$CODEX_HOME" \
+          codex plugin marketplace add "$CATALOG" --json > "$WORK/install.log"
+        HOME="$AGENT_HOME" CODEX_HOME="$CODEX_HOME" \
+          codex plugin add black-belt@black-belt --json >> "$WORK/install.log"
+        ;;
+      claude)
+        HOME="$AGENT_HOME" CLAUDE_CONFIG_DIR="$CLAUDE_CONFIG_DIR" \
+          claude plugin marketplace add "$CATALOG" --scope user > "$WORK/install.log"
+        HOME="$AGENT_HOME" CLAUDE_CONFIG_DIR="$CLAUDE_CONFIG_DIR" \
+          claude plugin install black-belt@black-belt --scope user >> "$WORK/install.log"
+        ;;
+      agy)
+        HOME="$AGENT_HOME" agy plugin install "$CATALOG" > "$WORK/install.log"
+        ;;
+    esac
+  fi
+
+  run_text_turn() {
+    prompt=$1 continuation=$2
+    case "$HOST:$continuation" in
+      claude:false)
+        set -- claude -p --dangerously-skip-permissions --output-format text "$prompt"
+        ;;
+      claude:true)
+        set -- claude -p --continue --dangerously-skip-permissions --output-format text "$prompt"
+        ;;
+      agy:false)
+        set -- agy -p "$prompt" --add-dir "$REPO" --dangerously-skip-permissions --output-format text
+        ;;
+      agy:true)
+        set -- agy -p "$prompt" --add-dir "$REPO" --continue --dangerously-skip-permissions --output-format text
+        ;;
+    esac
+    (cd "$REPO" && HOME="$AGENT_HOME" CODEX_HOME="$CODEX_HOME" \
+      CLAUDE_CONFIG_DIR="$CLAUDE_CONFIG_DIR" timeout 300 "$@") \
+      > "$WORK/turn.txt" 2>> "$COMMANDS"
+    turn_status=$?
+    cat "$WORK/turn.txt" >> "$COMMANDS"
+    mv "$WORK/turn.txt" "$LAST"
+    return "$turn_status"
+  }
+
+  if [ "$HOST" = codex ]; then
+    if [ -n "${FOLLOW_UP:-}" ]; then
+      if (cd "$REPO" && HOME="$AGENT_HOME" CODEX_HOME="$CODEX_HOME" timeout 300 \
+        codex exec --dangerously-bypass-approvals-and-sandbox \
+        --dangerously-bypass-hook-trust --json -o "$LAST" "$PROMPT") \
+        > "$COMMANDS" 2>&1 &&
+        (cd "$REPO" && HOME="$AGENT_HOME" CODEX_HOME="$CODEX_HOME" timeout 300 \
+        codex exec resume --last --dangerously-bypass-approvals-and-sandbox \
+        --dangerously-bypass-hook-trust --json -o "$LAST" "$FOLLOW_UP") \
+        >> "$COMMANDS" 2>&1; then agent_status=0; else agent_status=$?; fi
+    elif (cd "$REPO" && HOME="$AGENT_HOME" CODEX_HOME="$CODEX_HOME" timeout 300 \
+      codex exec --ephemeral --dangerously-bypass-approvals-and-sandbox \
+      --dangerously-bypass-hook-trust --json -o "$LAST" "$PROMPT") \
+      > "$COMMANDS" 2>&1; then agent_status=0; else agent_status=$?; fi
+  elif [ -n "${FOLLOW_UP:-}" ]; then
+    if run_text_turn "$PROMPT" false && run_text_turn "$FOLLOW_UP" true; then
+      agent_status=0
+    else
+      agent_status=$?
+    fi
+  else
+    if run_text_turn "$PROMPT" false; then agent_status=0; else agent_status=$?; fi
+  fi
+
+  if [ "$agent_status" -eq 0 ] && check "$REPO" "$LAST" "$COMMANDS"; then
+    result=PASS
+  else
+    result=FAIL
+  fi
+  printf '%-6s %-6s %-4s %-24s %s\n' "$HOST" "$arm" "$result" "$(basename "$CASE_FILE" .sh)" "$WORK"
+  [ "$result" = PASS ]
+)
+
+if [ "$#" -eq 0 ]; then
+  set -- "$CATALOG"/evals/cases/*.sh
+fi
+
+status=0
+for case_file in "$@"; do
+  run_case "$case_file"
+  case_status=$?
+  [ "$case_status" -eq 0 ] || status=1
+done
+exit "$status"
