@@ -1,5 +1,6 @@
 #!/bin/sh
 set -u
+export EVAL_RECORD=0
 
 root=$(CDPATH= cd "$(dirname "$0")/.." && pwd)
 export JJ_CONFIG=/dev/null JJ_USER='Eval Agent' JJ_EMAIL=eval@example.com

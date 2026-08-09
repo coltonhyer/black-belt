@@ -8,6 +8,8 @@ SOURCE_CODEX_HOME=${CODEX_HOME:-$HOME/.codex}
 SOURCE_CLAUDE_HOME=${CLAUDE_CONFIG_DIR:-$HOME/.claude}
 SOURCE_AGY_HOME=$HOME/.gemini/antigravity-cli
 JJ_BIN=$(realpath "${EVAL_JJ:-$(command -v jj)}")
+# One suite id per invocation (or per release, via EVAL_SUITE) groups trials.
+SUITE=${EVAL_SUITE:-$(date -u +%Y%m%dT%H%M%SZ)-$$}
 
 run_case() (
   set -e
@@ -138,6 +140,30 @@ run_case() (
     result=PASS
   else
     result=FAIL
+  fi
+
+  # Keep the evidence and append one stamped verdict row locally; upload to
+  # the bucket is a separate, deliberate step. Stub suites set EVAL_RECORD=0.
+  if [ "${EVAL_RECORD:-1}" = 1 ]; then
+    RESULTS="${EVAL_RESULTS:-$HOME/black-belt-eval-archive/results.jsonl}"
+    RUNS_DIR="${EVAL_RUNS_DIR:-$HOME/black-belt-eval-archive/runs}"
+    TRIAL_ID="$(date -u +%Y%m%dT%H%M%SZ)-$HOST-$arm-$(basename "$CASE_FILE" .sh)-$BASHPID"
+    mkdir -p "$RUNS_DIR" "$(dirname "$RESULTS")"
+    mv "$WORK" "$RUNS_DIR/$TRIAL_ID" && WORK="$RUNS_DIR/$TRIAL_ID"
+    # model is best-effort from the host's own trace; empty when undisclosed.
+    R_TS="$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+    R_CATALOG="$(jj -R "$CATALOG" log -r @ --no-graph -T commit_id 2>/dev/null || echo unknown)" \
+    R_HOST="$HOST" \
+    R_HOST_VERSION="$("$HOST" --version 2>/dev/null | head -1)" \
+    R_MODEL="$(grep -oE '"model" *: *"[^"]*"' "$WORK/commands.jsonl" 2>/dev/null | head -1 | cut -d'"' -f4)" \
+    R_ARM="$arm" \
+    R_CASE="$(basename "$CASE_FILE" .sh)" \
+    R_RESULT="$result" \
+    R_JJ="$("$JJ_BIN" version | awk '{print $2}')" \
+    R_TRIAL="$TRIAL_ID" \
+    R_SUITE="$SUITE" \
+    python3 -c 'import json,os;ks=("ts","catalog","host","host_version","model","arm","case","result","jj","trial","suite");print(json.dumps({k:os.environ.get("R_"+k.upper(),"") for k in ks}))' \
+      >> "$RESULTS"
   fi
   printf '%-6s %-6s %-4s %-24s %s\n' "$HOST" "$arm" "$result" "$(basename "$CASE_FILE" .sh)" "$WORK"
   [ "$result" = PASS ]

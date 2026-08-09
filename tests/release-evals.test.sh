@@ -1,5 +1,6 @@
 #!/bin/sh
 set -eu
+export EVAL_RECORD=0
 
 root=$(CDPATH= cd "$(dirname "$0")/.." && pwd)
 tmp=$(mktemp -d "${TMPDIR:-/tmp}/black-belt-release.XXXXXX")
