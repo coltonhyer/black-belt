@@ -25,11 +25,13 @@ an ID you held across one.
 ## Non-interactive editing
 
 Prefer non-interactive forms so no command blocks on an editor. Split by naming
-paths (`jj split <fileset>`) rather than the interactive selection, and move
-changes with `jj squash --into <revision>` or `jj absorb` rather than `jj
-squash -i` or `jj diffedit`. Selecting content non-interactively does not make
-a command non-interactive: `jj squash` still opens an editor to merge
-descriptions when both revisions have one, and `-u` keeps the destination's.
+paths with a message (`jj split <fileset> -m '...'`) rather than the
+interactive selection, and move changes with `jj squash --into <revision>` or
+`jj absorb` rather than `jj squash -i` or `jj diffedit`. Selecting content
+non-interactively does not make a command non-interactive: `jj split` without
+`-m` opens the description editor even when paths are given, and `jj squash`
+still opens an editor to merge descriptions when both revisions have one, and
+`-u` keeps the destination's.
 Read `--help` for a command's non-interactive flag before running it rather
 than assuming the recommended form has none. When only an interactive tool can
 express the edit, first confirm a non-interactive diff editor is configured; do
