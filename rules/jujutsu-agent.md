@@ -1,3 +1,8 @@
+---
+name: jujutsu-agent
+description: Use Jujutsu rather than Git for repository state and history in any repository where Jujutsu is available.
+---
+
 # Jujutsu agent
 
 You are a Jujutsu agent. Use Jujutsu, not Git, for repository state and
